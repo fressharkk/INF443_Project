@@ -69,6 +69,7 @@ void scene_structure::mouse_camera2(vec2 prev, vec2 curr)
 
 void scene_structure::initialize()
 {
+	flamme1 = new Flamme(3., 15., 5., 0.);
 	GLuint const shader_deformation = opengl_load_shader("shaders/deformation/vert.glsl", "shaders/deformation/frag.glsl");
 
 	// Default frame
@@ -133,53 +134,56 @@ void scene_structure::initialize()
 	environment.camera.manipulator_rotate_roll_pitch_yaw(1, 0,0);
 }
 
-
-
-void scene_structure::display()
-{	
-	// set the light position to the camera
-	environment.light = environment.camera.position(); 
-
-	// The standard frame
-	if (gui.display_frame)
-		draw(global_frame, environment);
-	timer2.update();
-	float t = timer2.t;
-
-	
-	// Displaying the shape deformed by the shader
-	draw(skybox, environment);
-	draw(terrain, environment);
-	draw(road, environment);
-	environment.update(t);  
-	draw(lake, environment);
+void scene_structure::draw_remaining()
+{
 
 	for (vec3 position : cart_position) {
 		cart.transform.translation = position;
-		float x= position[0];
-		float y= position[1];
-		float z= position[2]+0.112;
+		float x = position[0];
+		float y = position[1];
+		float z = position[2] + 0.112;
 
-		vec3 position_2 = {x,y,z};
+		vec3 position_2 = { x,y,z };
 		straw.transform.translation = position_2;
 		draw(cart, environment);
 		draw(straw, environment);
 	}
 
 	for (vec3 position : rock_position) {
-		float x= position[0];
-		float y= position[1];
-		float z= position[2]-0.6;
-		z = evaluate_terrain_height (x,y);
-		vec3 position_2 = {x,z,y};
+		float x = position[0];
+		float y = position[1];
+		float z = position[2] - 0.6;
+		z = evaluate_terrain_height(x, y);
+		vec3 position_2 = { x,z,y };
 		rock.transform.translation = position_2;
-		float a = rand_interval(0,3)/3;
+		float a = rand_interval(0, 3) / 3;
 		//rock.transform.scaling = a;
 		draw(rock, environment);
 	}
+}
+
+void scene_structure::display()
+{	
+	// set the light position to the camera
+	environment.light = environment.camera.position(); 
+	// The standard frame
+	if (gui.display_frame)
+		draw(global_frame, environment);
+	timer2.update();
 	
+	// Displaying the shape deformed by the shader
+	draw(skybox, environment);
+	draw(terrain, environment);
+	draw(road, environment);
+	environment.update(timer2.t);  
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_BLEND);
+	draw(lake, environment);
+
+	draw_remaining();
 	dragon.draw_dragon(environment);
-	
+	vec3 pos = dragon.dragon_hierarchy["Neck Head"].transform.translation;
+	flamme1->draw_flamme(environment,pos.x, pos.y, pos.z, vec3{0.,1.,0.});
 
 }
 

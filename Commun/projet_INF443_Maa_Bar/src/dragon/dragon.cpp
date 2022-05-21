@@ -202,3 +202,24 @@ void Dragon::draw_dragon(scene_environment_camera_head& environment)
 {
 	draw(dragon_hierarchy, environment);
 }
+
+Flamme::Flamme(float _cone_radius, float _cone_height, float _speed, float _time_begin)
+{
+	cone_radius = _cone_radius;
+	cone_height = _cone_height;
+	speed = _speed;
+	time_begin = _time_begin;
+	mesh cone = mesh_primitive_cone(cone_radius, cone_height, { 0,0,0 }, { 0,0,1 }, false, 40, 20);
+	GLuint const shader = opengl_load_shader("shaders/fire/fire_vert.glsl", "shaders/fire/fire_frag.glsl");
+	flamme_mesh_d.initialize(cone, "Flamme");
+	flamme_mesh_d.texture = opengl_load_texture_image("assets/texture_flamme_throwing.jpg");
+	flamme_mesh_d.shader = shader;
+}
+
+void Flamme::draw_flamme(scene_environment_camera_head& environment, float x, float y, float z, vec3 dir_axis)
+{
+
+	this->flamme_mesh_d.transform.rotation = rotation_transform::from_axis_angle(dir_axis, Pi);
+	this->flamme_mesh_d.transform.translation = vec3(0.,0., 1.+cone_height) + vec3(x, y, z);
+	draw(this->flamme_mesh_d, environment);
+}

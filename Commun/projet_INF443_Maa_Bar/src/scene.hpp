@@ -5,11 +5,11 @@
 
 #include "cgp/cgp.hpp"
 #include "terrain.hpp"
-#include "road.hpp"
+#include "decor_terrain/road.hpp"
 #include "cart.hpp"
 #include "straw.hpp"
-#include "rock.hpp"
-#include "lake.hpp"
+#include "decor_terrain/rock.hpp"
+#include "decor_terrain/lake.hpp"
 #include "dragon/dragon.hpp"
 
 
@@ -33,6 +33,7 @@ struct scene_structure {
 	// Elements and shapes of the scene
 	// ****************************** //
 	Dragon dragon;
+	Flamme *flamme1;
 	scene_environment_camera_head environment; // The specific scene environment that contains a "head camera" (*)
 	//scene_environment_with_shader_deformation environment; // The specific scene environment associated to the deforming shader (*)
 	
@@ -74,6 +75,7 @@ struct scene_structure {
 	void mouse_camera(double mouse_pos_x, double mouse_pos_y, double new_x, double new_y);
 	void mouse_camera2(cgp::vec2 prev, cgp::vec2 curr);
 
+	void draw_remaining();
 	void display_trees();
 	void display_mushroom();
 	void display_billboard();
