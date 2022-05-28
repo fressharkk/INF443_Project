@@ -1,0 +1,9 @@
+Idées à faire : 
+	Générateur de particule Feu + Fumée
+	Ombres
+	Contrôle de la météo => Simulation
+	Contrôle de la nuit 
+	Contrôle du dragon par la physique => Trouver de quoi simuler
+	Bataille autonome => Contrôle du nombre de belligérants de part et d'autre
+	Gérer lumières feu => Rendu stylé la nuit
+	
